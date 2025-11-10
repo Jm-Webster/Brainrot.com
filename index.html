@@ -139,7 +139,7 @@ main {
   font-size:16px;
 }
 
-/* Modal comments style reused for full view */
+/* Comments */
 .comments {
   margin-top: 20px;
 }
@@ -261,12 +261,11 @@ footer {
   <video id="fullVideo" controls style="width:100%; max-width:800px;"></video>
   <div class="comments">
     <h3>Comments</h3>
-    <div class="comment"><strong>User1:</strong> This video is awesome!</div>
-    <div class="comment"><strong>User2:</strong> Love it 😎</div>
+    <div id="commentList"></div>
     <div class="comment">
-      <input type="text" placeholder="Your name">
-      <textarea placeholder="Add a comment"></textarea>
-      <button>Post Comment</button>
+      <input type="text" id="commentName" placeholder="Your name">
+      <textarea id="commentText" placeholder="Add a comment"></textarea>
+      <button id="postComment">Post Comment</button>
     </div>
   </div>
 </div>
@@ -291,53 +290,102 @@ document.addEventListener('DOMContentLoaded', function(){
   const tabs = document.querySelectorAll('#categories button');
   const backBtn = document.getElementById('backToTop');
 
-  // Click thumbnail → show full video
-  videoCards.forEach(card=>{
+  // Comment section
+  const commentName = document.getElementById('commentName');
+  const commentText = document.getElementById('commentText');
+  const postComment = document.getElementById('postComment');
+  const commentList = document.getElementById('commentList');
+
+  let comments = JSON.parse(localStorage.getItem('comments') || '{}'); // per video storage
+
+  function renderComments(videoId){
+    const videoComments = comments[videoId] || [];
+    if(videoComments.length===0){
+      commentList.innerHTML = '<p>No comments yet. Be the first!</p>';
+      return;
+    }
+    commentList.innerHTML = videoComments.map(c=>`<div class="comment"><strong>${c.name}:</strong> ${c.text}</div>`).join('');
+  }
+
+  let currentVideoId = '';
+
+  // Click thumbnail → full video
+  videoCards.forEach((card,i)=>{
     card.addEventListener('click', ()=>{
-      fullVideoView.style.display = 'block';
+      currentVideoId = `video${i+1}`;
       videoGrid.style.display = 'none';
+      fullVideoView.style.display = 'block';
       fullVideo.src = card.dataset.src;
       fullTitle.innerText = card.dataset.title;
+      renderComments(currentVideoId);
     });
+  });
+
+  // Post comment
+  postComment.addEventListener('click', ()=>{
+    const name = commentName.value.trim();
+    const text = commentText.value.trim();
+    if(!name || !text) return alert('Please enter name and comment!');
+    if(!comments[currentVideoId]) comments[currentVideoId]=[];
+    comments[currentVideoId].push({name,text});
+    localStorage.setItem('comments', JSON.stringify(comments));
+    renderComments(currentVideoId);
+    commentName.value=''; commentText.value='';
   });
 
   // Back to grid
   backToGrid.addEventListener('click', ()=>{
     fullVideo.pause();
-    fullVideo.currentTime = 0;
-    fullVideoView.style.display = 'none';
-    videoGrid.style.display = 'grid';
+    fullVideo.currentTime=0;
+    fullVideoView.style.display='none';
+    videoGrid.style.display='grid';
   });
 
-  // Search
+  // Search filter
   searchInput.addEventListener('input', ()=>{
     const filter = searchInput.value.toLowerCase();
     videoCards.forEach(card=>{
       const title = card.dataset.title.toLowerCase();
-      card.style.display = title.includes(filter) ? 'block' : 'none';
+      card.style.display = title.includes(filter)? 'block':'none';
     });
   });
 
-  // Categories
+  // Category tabs
   tabs.forEach(tab=>{
     tab.addEventListener('click', ()=>{
+      // Show grid and hide full video
+      fullVideo.pause();
+      fullVideo.currentTime=0;
+      fullVideoView.style.display='none';
+      videoGrid.style.display='grid';
+
       tabs.forEach(t=>t.classList.remove('active'));
       tab.classList.add('active');
       const cat = tab.dataset.cat;
       videoCards.forEach(card=>{
         if(cat==='all') card.style.display='block';
-        else card.style.display = (card.dataset.category === cat) ? 'block' : 'none';
+        else card.style.display=(card.dataset.category===cat)? 'block':'none';
       });
     });
   });
 
-  // Logo/title scroll to top
-  document.getElementById('logo').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-  document.getElementById('siteTitle').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+  // Logo & title scroll
+  document.getElementById('logo').addEventListener('click', ()=>{
+    fullVideo.pause(); fullVideo.currentTime=0;
+    fullVideoView.style.display='none';
+    videoGrid.style.display='grid';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('siteTitle').addEventListener('click', ()=>{
+    fullVideo.pause(); fullVideo.currentTime=0;
+    fullVideoView.style.display='none';
+    videoGrid.style.display='grid';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
 
   // Back-to-top button
   window.addEventListener('scroll', ()=>{
-    backBtn.style.display = (window.scrollY > 300) ? 'block' : 'none';
+    backBtn.style.display = (window.scrollY>300)? 'block':'none';
   });
   backBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
