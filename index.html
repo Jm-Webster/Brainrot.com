@@ -1,37 +1,227 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Bisaya Hub.net</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bisaya Hub - Dark YouTube Style</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #121212;
+  color: #fff;
+}
+header {
+  background-color: #1f1f1f;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+}
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #ff0000;
+}
+main {
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.video-card {
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.video-card:hover {
+  transform: translateY(-5px);
+}
+.video-card img {
+  width: 100%;
+  display: block;
+}
+.video-info {
+  padding: 10px 15px;
+}
+.video-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #fff;
+}
+.video-info p {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  overflow: auto;
+}
+.modal-content {
+  background-color: #1f1f1f;
+  margin: 50px auto;
+  padding: 20px;
+  max-width: 800px;
+  border-radius: 10px;
+  position: relative;
+}
+.modal video {
+  width: 100%;
+  border-radius: 10px;
+}
+.close-btn {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+}
+.comments {
+  margin-top: 20px;
+}
+.comments h3 {
+  color: #ff0000;
+}
+.comment {
+  background-color: #121212;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.comment input, .comment textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: none;
+}
+.comment button {
+  background-color: #ff0000;
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>
 </head>
-<body style="background-color: Khaki;">
+<body>
 
-<h1>Welcome to Bisaya Hub.COM</h1>
-<p>“Ayaw kabalaka kung dili ka paborito sa tanang tao. Ang maldita nga anime character, wa gyud may paborito.”!</p>
+<header>
+  <h1>Bisaya Hub</h1>
+</header>
 
-<img src="KANO.jpg" alt="KANO.jpg" width="600" height="400"> 
+<main>
+<h2>Featured Videos</h2>
+<div class="video-grid">
+  <!-- Video 1 -->
+  <div class="video-card" onclick="openModal('Videos/video1.mp4','Video Title 1')">
+    <img src="Images/thumb1.png" alt="Video 1">
+    <div class="video-info">
+      <h3>Video Title 1</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
 
-<h2>DOWNLOAD Bisaya Scandal FOR FREE!!!</h2>
-<p><strong>Link For Bloxfruit Hacks:</strong></p>
-<a href="http://www.mediafire.com/?dr7j413wv5dc3n7t" target="_blank">http://www.mediafire.com/?dr7j413wv5dc3n7t</a>
+  <!-- Video 2 -->
+  <div class="video-card" onclick="openModal('Videos/video2.mp4','Video Title 2')">
+    <img src="Images/thumb2.png" alt="Video 2">
+    <div class="video-info">
+      <h3>Video Title 2</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
 
-<h3>BrainRot Combos</h3>
-<p>Link of combos:</p>
-<a href="https://www.youtube.com/watch?v=pw2GtUhNoCM" target="_blank">Combo#1</a> 
+  <!-- Video 3 -->
+  <div class="video-card" onclick="openModal('Videos/video3.mp4','Video Title 3')">
+    <img src="Images/thumb3.png" alt="Video 3">
+    <div class="video-info">
+      <h3>Video Title 3</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
 
-<h1>EXAMPLE OF BRAINROT</h1>
-<img src="BRAINROT.jpg" alt="BRAINROT.jpg" width="1000" height="660"> 
+  <!-- Video 4 -->
+  <div class="video-card" onclick="openModal('Videos/video4.mp4','Video Title 4')">
+    <img src="Images/thumb4.png" alt="Video 4">
+    <div class="video-info">
+      <h3>Video Title 4</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
 
-<video width="1000" height="660" autoplay muted>
-  <source src="Example of Brainrot.mp4" type="video/mp4">
-  <source src="Example of Brainrot.ogg" type="video/ogg">
-  Your browser does not support the video tag.
-</video>
+  <!-- Video 5 -->
+  <div class="video-card" onclick="openModal('Videos/video5.mp4','Video Title 5')">
+    <img src="Images/thumb5.png" alt="Video 5">
+    <div class="video-info">
+      <h3>Video Title 5</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
 
-<span style='font-size:100px;'>&#128053;</span>
+  <!-- Video 6 -->
+  <div class="video-card" onclick="openModal('Videos/video6.mp4','Video Title 6')">
+    <img src="Images/thumb6.png" alt="Video 6">
+    <div class="video-info">
+      <h3>Video Title 6</h3>
+      <p>Short description here</p>
+    </div>
+  </div>
+</div>
+</main>
 
-<iframe width="420" height="315" src="https://www.youtube.com/embed/nreUlha9o2g" frameborder="0" allowfullscreen></iframe>
+<!-- Modal -->
+<div id="videoModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <video id="modalVideo" controls></video>
+    <div class="comments">
+      <h3>Comments</h3>
+      <div class="comment">
+        <strong>User1:</strong> This video is awesome!
+      </div>
+      <div class="comment">
+        <strong>User2:</strong> Love it 😎
+      </div>
+      <div class="comment">
+        <input type="text" placeholder="Your name">
+        <textarea placeholder="Add a comment"></textarea>
+        <button>Post Comment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(videoSrc, title) {
+  document.getElementById('modalVideo').src = videoSrc;
+  document.getElementById('modalTitle').innerText = title;
+  document.getElementById('videoModal').style.display = 'block';
+}
+function closeModal() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.getElementById('modalVideo').pause();
+}
+window.onclick = function(event) {
+  var modal = document.getElementById('videoModal');
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+</script>
 
 </body>
 </html>
-
-
